@@ -40,18 +40,17 @@ client.once('ready', () => {
     console.log('Ready!');
 
 
-    if (timer_enabled === true) {
-        const job = new CronJob(
-            `* * * * *`,
-            function () {
-                let today = new Date().toLocaleDateString()
-                let time = Math.round(new Date().getTime() / 1000).toString()
-                DB.qotd.findOne({
-                    order: [
-                        sequelize.fn('rand')
-                    ]
-                }).then(question => {
-
+    const job = new CronJob(
+        `* * * * *`,
+        function () {
+            let today = new Date().toLocaleDateString()
+            let time = Math.round(new Date().getTime() / 1000).toString()
+            DB.qotd.findOne({
+                order: [
+                    sequelize.fn('rand')
+                ]
+            }).then(question => {
+                if (timer_enabled === true) {
                     if (question === null) {
                         /* const errorembed = new MessageEmbed()
                              .setTitle(`Error`)
@@ -84,14 +83,14 @@ client.once('ready', () => {
                             }
                         })
                     }
-                })
-            },
-            null,
-            true,
-            'America/Los_Angeles'
+                }
+            })
+        },
+        null,
+        true,
+        'America/Los_Angeles'
 
-        )
-    }
+    )
 });
 
 client.on('message', async message => {
