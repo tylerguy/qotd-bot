@@ -8,7 +8,7 @@ const {
 } = require('discord.js');
 
 const {
-  DB
+  DB, sequelize
 } = require('./db/db_init');
 
 // Create a new client instance
@@ -58,9 +58,11 @@ if (message.content.startsWith("!submit")) {
   }
   if (message.content.startsWith("!random")) {
     DB.qotd.findOne({
-      Question: 'rand()'
+      order: [
+          sequelize.fn('rand')
+      ]
     }).then((question) => {
-      console.log(question.Question)
+      message.channel.send(question.Question)
     });
   }
     
