@@ -57,13 +57,27 @@ if (message.content.startsWith("!submit")) {
     })
   }
   if (message.content.startsWith("!random")) {
-    DB.qotd.findOne({
+      let today = new Date().toLocaleDateString()
+      let time = Math.round(new Date().getTime() / 1000).toString()
+    const question = DB.qotd.findOne({
       order: [
           sequelize.fn('rand')
       ]
-    }).then((question) => {
-      message.channel.send(question.Question)
-    });
+    }).then(question => {
+
+    const questionembed = new MessageEmbed()
+    .setTitle(`QOTD ${today}`)
+    .setDescription(`${question.Question}`)
+    
+    .addFields({
+              name: 'Generated at',
+              value: `<t:${time}:t>`
+            })
+
+    message.channel.send({embeds: [questionembed]})
+
+
+    })
   }
     
 })
