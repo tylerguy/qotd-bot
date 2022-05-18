@@ -65,10 +65,20 @@ if (message.content.startsWith("!submit")) {
       ]
     }).then(question => {
 
+    if (question === null) {
+        const errorembed = new MessageEmbed()
+        .setTitle(`Error`)
+        .setColor("#FF0000")
+        .setDescription(`No Question Found`)
+        
+        message.channel.send({embeds: [errorembed]})
+    }
+    else {
+
     const questionembed = new MessageEmbed()
     .setTitle(`QOTD ${today}`)
     .setDescription(`${question.Question}`)
-    
+    .setThumbnail(`https://raw.githubusercontent.com/tylerguy/qotd-bot/main/QOTD%20Icon.png`)
     .addFields({
               name: 'Generated at',
               value: `<t:${time}:t>`
@@ -76,7 +86,12 @@ if (message.content.startsWith("!submit")) {
 
     message.channel.send({embeds: [questionembed]})
 
-
+    DB.qotd.destroy({
+        where: {
+            Question: question.Question
+        }
+    })
+}
     })
   }
     
