@@ -35,13 +35,13 @@ client.once("ready", () => {
         if (timer_enabled === true) {
           if (question === null) {
             /* const errorembed = new MessageEmbed()
-                 .setTitle(`Error`)
-                 .setColor("#FF0000")
-                 .setDescription(`No Question Found`)
+               .setTitle(`Error`)
+               .setColor("#FF0000")
+               .setDescription(`No Question Found`)
 
-             message.channel.send({
-                 embeds: [errorembed]
-             }) */
+           message.channel.send({
+               embeds: [errorembed]
+           }) */
             console.log("No Questions Found");
           } else {
             const questionembed = new MessageEmbed()
