@@ -1,0 +1,22 @@
+{
+  "name": "qotd-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tylerguy/qotd-bot.git"
+  },
+  "author": "Tyler Denman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tylerguy/qotd-bot/issues"
+  },
+  "homepage": "https://github.com/tylerguy/qotd-bot#readme",
+  "dependencies": {
+    "discord.js": "^13.7.0"
+  }
+}
