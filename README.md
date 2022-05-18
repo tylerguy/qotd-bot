@@ -11,6 +11,6 @@
 [![Package - cron](https://img.shields.io/github/package-json/dependency-version/tylerguy/qotd-bot/cron?logo=cron&logoColor=white&color=blue)](https://www.npmjs.com/package/cron)
 ## How-To
 
-[Commands]([https://](https://github.com/tylerguy/qotd-bot/wiki/Commands)
+[Commands](https://github.com/tylerguy/qotd-bot/wiki/Commands)
 
 
