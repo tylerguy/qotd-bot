@@ -34,14 +34,6 @@ client.once("ready", () => {
       DB.qotd.findOne({ order: [sequelize.fn("rand")] }).then((question) => {
         if (timer_enabled === true) {
           if (question === null) {
-            /* const errorembed = new MessageEmbed()
-         .setTitle(`Error`)
-         .setColor("#FF0000")
-         .setDescription(`No Question Found`)
-
-     message.channel.send({
-         embeds: [errorembed]
-     }) */
             console.log("No Questions Found");
           } else {
             const questionembed = new MessageEmbed()
