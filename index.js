@@ -10,7 +10,6 @@ const {
 const {
     token,
     admin_role,
-    timer
 } = require('./config.json');
 const Discord = require('discord.js')
 const {
@@ -25,6 +24,7 @@ const {
 const CronJob = require('cron').CronJob;
 
 var timer_enabled = true;
+var channel;
 // Create a new client instance
 const client = new Discord.Client({
     intents: [
@@ -41,9 +41,9 @@ client.once('ready', () => {
     console.log('Ready!');
 
 
-    if (enable_timer === true) {
+    if (timer_enabled === true) {
     const job = new CronJob(
-        `${timer}`,
+        `* * * * *`,
         function () {
             let today = new Date().toLocaleDateString()
             let time = Math.round(new Date().getTime() / 1000).toString()
@@ -68,13 +68,14 @@ client.once('ready', () => {
                     const questionembed = new MessageEmbed()
                         .setTitle(`QOTD ${today}`)
                         .setDescription(`${question.Question}`)
+                        .setColor(`GREEN`)
                         .setThumbnail(`https://raw.githubusercontent.com/tylerguy/qotd-bot/main/QOTD%20Icon.png`)
                         .addFields({
                             name: 'Generated at',
                             value: `<t:${time}:t>`
                         })
 
-                    client.channels.cache.get("950531059827769354").send({
+                    client.channels.cache.get(channel).send({
                         embeds: [questionembed]
                     })
 
@@ -173,13 +174,14 @@ client.on('message', async message => {
                 const questionembed = new MessageEmbed()
                     .setTitle(`QOTD ${today}`)
                     .setDescription(`${question.Question}`)
+                    .setColor(`GREEN`)
                     .setThumbnail(`https://raw.githubusercontent.com/tylerguy/qotd-bot/main/QOTD%20Icon.png`)
                     .addFields({
                         name: 'Generated at',
                         value: `<t:${time}:t>`
                     })
 
-                message.channel.send({
+                client.channels.cache.get(`${channel}`).send({
                     embeds: [questionembed]
                 })
 
@@ -191,6 +193,52 @@ client.on('message', async message => {
             }
         })
     }
+
+    if (message.content.startsWith("!channel"))
+    {
+        channel = message.content.slice("!channel").trim().split(' ').slice(1).join(` `);
+
+        const channelembed = new MessageEmbed()
+        .setTitle("Channel Changed")
+        .setDescription(`New Questions will be sent to <#${channel}>`)
+
+        message.channel.send({embeds: [channelembed]})
+    }
+    if (message.content.startsWith("!help"))
+    {
+        const HelpEmbed = new MessageEmbed()
+        .setTitle(`Command List`)
+        .setColor(`RED`)
+        .addFields(
+        {        
+          "name": `!help`,
+          "value": `Displays this list of commands`
+        },
+        {
+          "name": `!submit`,
+          "value": `Submits a question into the pool of questions`
+        },
+        {
+          "name": `!enable/disable`,
+          "value": `Enables/Disables the automatic timer for sending questions`
+        },
+        {
+          "name": `!random`,
+          "value": `Sends a new question to the configured channel`
+        },
+        {
+          "name": `!channel`,
+          "value": `Specifies the channel a new question should be posted`
+        },
+        
+         
+        )
+    
+    message.channel.send({embeds: [HelpEmbed]})
+    }      
+
+       
+        
 })
 
 // Login to Discord with your client's token
