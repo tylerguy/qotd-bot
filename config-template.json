@@ -6,7 +6,5 @@
     "DBPass": "CHANGE ME",
     "DBHost": "CHANGE ME",
 
-	"admin_role": "ROLE_ID",
-
-	"timer": "* * * * *"
+	"admin_role": "ROLE_ID"
 }
