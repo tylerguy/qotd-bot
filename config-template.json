@@ -1,7 +1,10 @@
 {
 	"token": "CHANGE ME",
-    "DBName": "CHANGE ME",
+    
+	"DBName": "CHANGE ME",
     "DBUser": "CHANGE ME",
     "DBPass": "CHANGE ME",
-    "DBHost": "CHANGE ME"
+    "DBHost": "CHANGE ME",
+
+	"admin_role": "ROLE_ID"
 }

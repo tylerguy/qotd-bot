@@ -1,7 +1,7 @@
 // Require the necessary discord.js classes
 const { Client, Intents, Message } = require('discord.js');
 const { measureMemory } = require('vm');
-const { token } = require('./config.json');
+const { token, admin_role } = require('./config.json');
 const Discord = require('discord.js')
 const {
   MessageEmbed
@@ -30,6 +30,7 @@ client.once('ready', () => {
 client.on('message', async message => {
     
 if (message.content.startsWith("!submit")) {
+    if (!message.member.roles.cache.has(`${admin_role}`)) return message.channel.send("You don't have permission to use this command")
 
     const submitter = message.member.user.username;
     const args = message.content.slice("!submit").trim().split(' ').slice(1).join(` `);
