@@ -12,6 +12,7 @@
 ## How-To
 
 [Commands](https://github.com/tylerguy/qotd-bot/wiki/Commands)
+
 [Configuration](https://github.com/tylerguy/qotd-bot/wiki/Configuration)
 
 
