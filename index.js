@@ -23,7 +23,7 @@ const {
 
 const CronJob = require('cron').CronJob;
 
-var timer_enabled = true;
+var timer_enabled = false;
 var channel;
 // Create a new client instance
 const client = new Discord.Client({
