@@ -2,6 +2,10 @@
 const { Client, Intents, Message } = require('discord.js');
 const { measureMemory } = require('vm');
 const { token } = require('./config.json');
+const Discord = require('discord.js')
+const {
+  MessageEmbed
+} = require('discord.js');
 
 const {
   DB
