@@ -1,3 +1,7 @@
 {
-	"token": "your-token-goes-here"
+	"token": "CHANGE ME",
+    "DBName": "CHANGE ME",
+    "DBUser": "CHANGE ME",
+    "DBPass": "CHANGE ME",
+    "DBHost": "CHANGE ME"
 }

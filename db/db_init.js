@@ -6,9 +6,12 @@
 const Sequelize = require('sequelize')
 const path = require("path")
 const fs = require("fs")
+const { DBName , DBUser, DBPass, DBHost } = require("../config.json")
 
-
-const sequelize = new Sequelize('***')
+const sequelize = new Sequelize(`${DBName}`, `${DBUser}`, `${DBPass}`, {
+  host: `${DBHost}`,
+  dialect: 'mysql',
+});
 
 // get all models and save it into DB.<file_name>
 const DB = {}
