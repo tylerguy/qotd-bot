@@ -1,5 +1,7 @@
 {
 	"token": "CHANGE ME",
+    "clientId": "CHANGE ME",
+	"guildId": "CHANGE ME",
     
 	"DBName": "CHANGE ME",
     "DBUser": "CHANGE ME",
