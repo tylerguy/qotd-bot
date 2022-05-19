@@ -43,7 +43,7 @@ client.once("ready", () => {
               .setColor("#FF0000")
               .setDescription(`No Question Found`);
 
-            message.channel.send({ embeds: [errorembed] });
+            console.log("No questions found");
           } else {
             if (!lastmsg) {
               console.log("Last message doesn't exist");
