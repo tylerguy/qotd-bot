@@ -4,6 +4,7 @@ const { measureMemory } = require("vm");
 const { token, admin_role } = require("./config.json");
 const Discord = require("discord.js");
 const { MessageEmbed } = require("discord.js");
+const { SlashCommandBuilder } = require("@discordjs/builders");
 
 const { DB, sequelize } = require("./db/db_init");
 
