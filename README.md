@@ -1,5 +1,7 @@
 # Question of the Day (Qotd) Discord Bot coded using discord.js
 
+### This branch contains the base for slash command implementation, it is recommended to use the main branch for now since this functionality isn't fully complete yet
+
 [![tylerguy - qotd-bot](https://img.shields.io/static/v1?label=tylerguy&message=qotd-bot&color=blue&logo=github)](https://github.com/tylerguy/qotd-bot "Go to GitHub repo")
 [![stars - qotd-bot](https://img.shields.io/github/stars/tylerguy/qotd-bot?style=social)](https://github.com/tylerguy/qotd-bot)
 [![forks - qotd-bot](https://img.shields.io/github/forks/tylerguy/qotd-bot?style=social)](https://github.com/tylerguy/qotd-bot)
