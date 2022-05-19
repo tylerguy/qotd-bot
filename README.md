@@ -11,10 +11,9 @@
 [![Package - mysql2](https://img.shields.io/github/package-json/dependency-version/tylerguy/qotd-bot/mysql2?color=blue)](https://www.npmjs.com/package/mysql2)
 [![Package - sequelize](https://img.shields.io/github/package-json/dependency-version/tylerguy/qotd-bot/sequelize?logo=sequelize&logoColor=white&color=blue)](https://www.npmjs.com/package/sequelize)
 [![Package - cron](https://img.shields.io/github/package-json/dependency-version/tylerguy/qotd-bot/cron?logo=cron&logoColor=white&color=blue)](https://www.npmjs.com/package/cron)
+
 ## How-To
 
 [Commands](https://github.com/tylerguy/qotd-bot/wiki/Commands)
 
 [Configuration](https://github.com/tylerguy/qotd-bot/wiki/Configuration)
-
-
