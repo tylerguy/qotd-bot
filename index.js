@@ -9,8 +9,11 @@ const { DB, sequelize } = require("./db/db_init");
 
 const CronJob = require("cron").CronJob;
 
+// define global variables
 var timer_enabled = false;
 var channel;
+var lastmsg;
+
 // Create a new client instance
 const client = new Discord.Client({
   intents: [
@@ -27,7 +30,7 @@ client.once("ready", () => {
   console.log("Ready!");
 
   const job = new CronJob(
-    `* * * * *`,
+    `0 12 * * *`,
     function () {
       let today = new Date().toLocaleDateString();
       let time = Math.round(new Date().getTime() / 1000).toString();
@@ -85,6 +88,13 @@ client.on("message", async (message) => {
     }
   }
 
+  /*  if (message.content.startsWith("!pins")) {
+    const botchannel = client.channels.cache.get("976919179389182012");
+    const lastmsg = "976920701342732369";
+
+    botchannel.messages.fetch(lastmsg).then((msg) => msg.unpin());
+  } */
+
   if (message.content.startsWith("!submit")) {
     if (!message.member.roles.cache.has(`${admin_role}`))
       return message.channel.send(
@@ -127,6 +137,14 @@ client.on("message", async (message) => {
 
           message.channel.send({ embeds: [errorembed] });
         } else {
+          if (!lastmsg) {
+            console.log("Last message doesn't exist");
+          } else {
+            const QOTDchannel = client.channels.cache.get(`${channel}`);
+
+            QOTDchannel.messages.fetch(lastmsg).then((msg) => msg.unpin());
+          }
+
           const questionembed = new MessageEmbed()
             .setTitle(`QOTD ${today}`)
             .setDescription(`${question.Question}`)
@@ -136,15 +154,27 @@ client.on("message", async (message) => {
             )
             .addFields({ name: "Generated at", value: `<t:${time}:t>` });
 
-          client.channels.cache.get(`${channel}`).send({
-            embeds: [questionembed],
-          });
+          const QOTD = client.channels.cache
+            .get(`${channel}`)
+            .send({
+              embeds: [questionembed],
+            })
+            .then((QOTD) => {
+              QOTD.pin();
+              lastmsg = QOTD.id;
+            })
+            .then(function () {
+              console.log(lastmsg);
+            });
 
           DB.qotd.destroy({ where: { Question: question.Question } });
         }
       });
   }
 
+  if (message.content.startsWith("check")) {
+    message.channel.send(lastmsg);
+  }
   if (message.content.startsWith("!channel")) {
     channel = message.content
       .slice("!channel")
