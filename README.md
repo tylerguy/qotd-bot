@@ -1,6 +1,6 @@
 # Question of the Day (Qotd) Discord Bot coded using discord.js
 
-## This Branch contains modifications for the grindstone discord server, these changes will be merged into main once they've been polished and tested
+## This Branch contains modifications for the Project Grindstone discord server, these changes will be merged into main once they've been polished and tested
 
 [![tylerguy - qotd-bot](https://img.shields.io/static/v1?label=tylerguy&message=qotd-bot&color=blue&logo=github)](https://github.com/tylerguy/qotd-bot "Go to GitHub repo")
 [![stars - qotd-bot](https://img.shields.io/github/stars/tylerguy/qotd-bot?style=social)](https://github.com/tylerguy/qotd-bot)
