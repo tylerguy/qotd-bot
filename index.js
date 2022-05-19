@@ -34,11 +34,25 @@ client.once("ready", () => {
     function () {
       let today = new Date().toLocaleDateString();
       let time = Math.round(new Date().getTime() / 1000).toString();
-      DB.qotd.findOne({ order: [sequelize.fn("rand")] }).then((question) => {
-        if (timer_enabled === true) {
+      const question = DB.qotd
+        .findOne({ order: [sequelize.fn("rand")] })
+        .then((question) => {
           if (question === null) {
-            console.log("No Questions Found");
+            const errorembed = new MessageEmbed()
+              .setTitle(`Error`)
+              .setColor("#FF0000")
+              .setDescription(`No Question Found`);
+
+            message.channel.send({ embeds: [errorembed] });
           } else {
+            if (!lastmsg) {
+              console.log("Last message doesn't exist");
+            } else {
+              const QOTDchannel = client.channels.cache.get(`${channel}`);
+
+              QOTDchannel.messages.fetch(lastmsg).then((msg) => msg.unpin());
+            }
+
             const questionembed = new MessageEmbed()
               .setTitle(`QOTD ${today}`)
               .setDescription(`${question.Question}`)
@@ -48,14 +62,22 @@ client.once("ready", () => {
               )
               .addFields({ name: "Generated at", value: `<t:${time}:t>` });
 
-            client.channels.cache
-              .get(channel)
-              .send({ embeds: [questionembed] });
+            const QOTD = client.channels.cache
+              .get(`${channel}`)
+              .send({
+                embeds: [questionembed],
+              })
+              .then((QOTD) => {
+                QOTD.pin();
+                lastmsg = QOTD.id;
+              })
+              .then(function () {
+                console.log(lastmsg);
+              });
 
             DB.qotd.destroy({ where: { Question: question.Question } });
           }
-        }
-      });
+        });
     },
     null,
     true,
