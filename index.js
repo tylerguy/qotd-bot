@@ -87,14 +87,26 @@ client.once("ready", () => {
 
 client.on("message", async (message) => {
   if (message.content.startsWith("!disable")) {
+    if (!message.member.roles.cache.has(admin_role))
+      return message.channel.send(
+        "You don't have permission to use this command"
+      );
     timer_enabled = false;
   }
 
   if (message.content.startsWith("!enable")) {
+    if (!message.member.roles.cache.has("973731765703282708"))
+      return message.channel.send(
+        "You don't have permission to use this command"
+      );
     timer_enabled = true;
   }
 
   if (message.content.startsWith("!state")) {
+    if (!message.member.roles.cache.has("973731765703282708"))
+      return message.channel.send(
+        "You don't have permission to use this command"
+      );
     if (timer_enabled === true) {
       const enabledembed = new MessageEmbed()
         .setTitle(`Timer State`)
@@ -146,6 +158,10 @@ client.on("message", async (message) => {
     message.channel.send({ embeds: [qotdembed] });
   }
   if (message.content.startsWith("!random")) {
+    if (!message.member.roles.cache.has("973731765703282708"))
+      return message.channel.send(
+        "You don't have permission to use this command"
+      );
     let today = new Date().toLocaleDateString();
     let time = Math.round(new Date().getTime() / 1000).toString();
     const question = DB.qotd
@@ -194,10 +210,18 @@ client.on("message", async (message) => {
       });
   }
 
-  if (message.content.startsWith("check")) {
+  if (message.content.startsWith("!idcheck")) {
+    if (!message.member.roles.cache.has("973731765703282708"))
+      return message.channel.send(
+        "You don't have permission to use this command"
+      );
     message.channel.send(lastmsg);
   }
   if (message.content.startsWith("!channel")) {
+    if (!message.member.roles.cache.has("973731765703282708"))
+      return message.channel.send(
+        "You don't have permission to use this command"
+      );
     channel = message.content
       .slice("!channel")
       .trim()
@@ -212,6 +236,10 @@ client.on("message", async (message) => {
     message.channel.send({ embeds: [channelembed] });
   }
   if (message.content.startsWith("!help")) {
+    if (!message.member.roles.cache.has("973731765703282708"))
+      return message.channel.send(
+        "You don't have permission to use this command"
+      );
     const HelpEmbed = new MessageEmbed()
       .setTitle(`Command List`)
       .setColor(`RED`)
