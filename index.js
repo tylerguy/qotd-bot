@@ -24,10 +24,18 @@ const client = new Discord.Client({
   partials: ["MESSAGE", "CHANNEL", "USER"],
 });
 
+client.config = require("./config.json");
+
 // When the client is ready, run this code (only once)
-client.once("ready", () => {
+client.once("ready", async () => {
   DB.qotd.sync();
   console.log("Ready!");
+
+  if (client.config.enable_activity) {
+    await client.user.setActivity(client.config.activity.name, {
+      type: client.config.activity.type,
+    });
+  }
 
   const job = new CronJob(
     `0 12 * * *`,
@@ -87,7 +95,7 @@ client.once("ready", () => {
 
 client.on("message", async (message) => {
   if (message.content.startsWith("!disable")) {
-    if (!message.member.roles.cache.has(admin_role))
+    if (!message.member.roles.cache.has(`${admin_role}`))
       return message.channel.send(
         "You don't have permission to use this command"
       );
@@ -95,7 +103,7 @@ client.on("message", async (message) => {
   }
 
   if (message.content.startsWith("!enable")) {
-    if (!message.member.roles.cache.has("973731765703282708"))
+    if (!message.member.roles.cache.has(`${admin_role}`))
       return message.channel.send(
         "You don't have permission to use this command"
       );
@@ -158,7 +166,7 @@ client.on("message", async (message) => {
     message.channel.send({ embeds: [qotdembed] });
   }
   if (message.content.startsWith("!random")) {
-    if (!message.member.roles.cache.has("973731765703282708"))
+    if (!message.member.roles.cache.has(`${admin_role}`))
       return message.channel.send(
         "You don't have permission to use this command"
       );
@@ -211,14 +219,14 @@ client.on("message", async (message) => {
   }
 
   if (message.content.startsWith("!idcheck")) {
-    if (!message.member.roles.cache.has("973731765703282708"))
+    if (!message.member.roles.cache.has(`${admin_role}`))
       return message.channel.send(
         "You don't have permission to use this command"
       );
     message.channel.send(lastmsg);
   }
   if (message.content.startsWith("!channel")) {
-    if (!message.member.roles.cache.has("973731765703282708"))
+    if (!message.member.roles.cache.has(`${admin_role}`))
       return message.channel.send(
         "You don't have permission to use this command"
       );
@@ -236,7 +244,7 @@ client.on("message", async (message) => {
     message.channel.send({ embeds: [channelembed] });
   }
   if (message.content.startsWith("!help")) {
-    if (!message.member.roles.cache.has("973731765703282708"))
+    if (!message.member.roles.cache.has(`${admin_role}`))
       return message.channel.send(
         "You don't have permission to use this command"
       );
