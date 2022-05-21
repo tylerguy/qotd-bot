@@ -1,10 +1,13 @@
 {
-	"token": "CHANGE ME",
-    
-	"DBName": "CHANGE ME",
-    "DBUser": "CHANGE ME",
-    "DBPass": "CHANGE ME",
-    "DBHost": "CHANGE ME",
-
-	"admin_role": "ROLE_ID"
+  "token": "CHANGE ME",
+  "DBName": "CHANGE ME",
+  "DBUser": "CHANGE ME",
+  "DBPass": "CHANGE ME",
+  "DBHost": "CHANGE ME",
+  "admin_role": "ROLE_ID",
+  "enable_activity": true,
+  "activity": {
+    "name": "CHANGE ME",
+    "type": "PLAYING"
+  }
 }

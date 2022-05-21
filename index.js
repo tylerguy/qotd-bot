@@ -9,8 +9,11 @@ const { DB, sequelize } = require("./db/db_init");
 
 const CronJob = require("cron").CronJob;
 
+// define global variables
 var timer_enabled = false;
 var channel;
+var lastmsg;
+
 // Create a new client instance
 const client = new Discord.Client({
   intents: [
@@ -21,21 +24,43 @@ const client = new Discord.Client({
   partials: ["MESSAGE", "CHANNEL", "USER"],
 });
 
+client.config = require("./config.json");
+
 // When the client is ready, run this code (only once)
-client.once("ready", () => {
+client.once("ready", async () => {
   DB.qotd.sync();
   console.log("Ready!");
 
+  if (client.config.enable_activity) {
+    await client.user.setActivity(client.config.activity.name, {
+      type: client.config.activity.type,
+    });
+  }
+
   const job = new CronJob(
-    `* * * * *`,
+    `0 12 * * *`,
     function () {
       let today = new Date().toLocaleDateString();
       let time = Math.round(new Date().getTime() / 1000).toString();
-      DB.qotd.findOne({ order: [sequelize.fn("rand")] }).then((question) => {
-        if (timer_enabled === true) {
+      const question = DB.qotd
+        .findOne({ order: [sequelize.fn("rand")] })
+        .then((question) => {
           if (question === null) {
-            console.log("No Questions Found");
+            const errorembed = new MessageEmbed()
+              .setTitle(`Error`)
+              .setColor("#FF0000")
+              .setDescription(`No Question Found`);
+
+            console.log("No questions found");
           } else {
+            if (!lastmsg) {
+              console.log("Last message doesn't exist");
+            } else {
+              const QOTDchannel = client.channels.cache.get(`${channel}`);
+
+              QOTDchannel.messages.fetch(lastmsg).then((msg) => msg.unpin());
+            }
+
             const questionembed = new MessageEmbed()
               .setTitle(`QOTD ${today}`)
               .setDescription(`${question.Question}`)
@@ -45,14 +70,22 @@ client.once("ready", () => {
               )
               .addFields({ name: "Generated at", value: `<t:${time}:t>` });
 
-            client.channels.cache
-              .get(channel)
-              .send({ embeds: [questionembed] });
+            const QOTD = client.channels.cache
+              .get(`${channel}`)
+              .send({
+                embeds: [questionembed],
+              })
+              .then((QOTD) => {
+                QOTD.pin();
+                lastmsg = QOTD.id;
+              })
+              .then(function () {
+                console.log(lastmsg);
+              });
 
             DB.qotd.destroy({ where: { Question: question.Question } });
           }
-        }
-      });
+        });
     },
     null,
     true,
@@ -62,14 +95,26 @@ client.once("ready", () => {
 
 client.on("message", async (message) => {
   if (message.content.startsWith("!disable")) {
+    if (!message.member.roles.cache.has(`${admin_role}`))
+      return message.channel.send(
+        "You don't have permission to use this command"
+      );
     timer_enabled = false;
   }
 
   if (message.content.startsWith("!enable")) {
+    if (!message.member.roles.cache.has(`${admin_role}`))
+      return message.channel.send(
+        "You don't have permission to use this command"
+      );
     timer_enabled = true;
   }
 
   if (message.content.startsWith("!state")) {
+    if (!message.member.roles.cache.has("973731765703282708"))
+      return message.channel.send(
+        "You don't have permission to use this command"
+      );
     if (timer_enabled === true) {
       const enabledembed = new MessageEmbed()
         .setTitle(`Timer State`)
@@ -84,6 +129,13 @@ client.on("message", async (message) => {
       message.channel.send({ embeds: [disabledembed] });
     }
   }
+
+  /*  if (message.content.startsWith("!pins")) {
+    const botchannel = client.channels.cache.get("976919179389182012");
+    const lastmsg = "976920701342732369";
+
+    botchannel.messages.fetch(lastmsg).then((msg) => msg.unpin());
+  } */
 
   if (message.content.startsWith("!submit")) {
     if (!message.member.roles.cache.has(`${admin_role}`))
@@ -114,6 +166,10 @@ client.on("message", async (message) => {
     message.channel.send({ embeds: [qotdembed] });
   }
   if (message.content.startsWith("!random")) {
+    if (!message.member.roles.cache.has(`${admin_role}`))
+      return message.channel.send(
+        "You don't have permission to use this command"
+      );
     let today = new Date().toLocaleDateString();
     let time = Math.round(new Date().getTime() / 1000).toString();
     const question = DB.qotd
@@ -127,6 +183,14 @@ client.on("message", async (message) => {
 
           message.channel.send({ embeds: [errorembed] });
         } else {
+          if (!lastmsg) {
+            console.log("Last message doesn't exist");
+          } else {
+            const QOTDchannel = client.channels.cache.get(`${channel}`);
+
+            QOTDchannel.messages.fetch(lastmsg).then((msg) => msg.unpin());
+          }
+
           const questionembed = new MessageEmbed()
             .setTitle(`QOTD ${today}`)
             .setDescription(`${question.Question}`)
@@ -136,16 +200,36 @@ client.on("message", async (message) => {
             )
             .addFields({ name: "Generated at", value: `<t:${time}:t>` });
 
-          client.channels.cache.get(`${channel}`).send({
-            embeds: [questionembed],
-          });
+          const QOTD = client.channels.cache
+            .get(`${channel}`)
+            .send({
+              embeds: [questionembed],
+            })
+            .then((QOTD) => {
+              QOTD.pin();
+              lastmsg = QOTD.id;
+            })
+            .then(function () {
+              console.log(lastmsg);
+            });
 
           DB.qotd.destroy({ where: { Question: question.Question } });
         }
       });
   }
 
+  if (message.content.startsWith("!idcheck")) {
+    if (!message.member.roles.cache.has(`${admin_role}`))
+      return message.channel.send(
+        "You don't have permission to use this command"
+      );
+    message.channel.send(lastmsg);
+  }
   if (message.content.startsWith("!channel")) {
+    if (!message.member.roles.cache.has(`${admin_role}`))
+      return message.channel.send(
+        "You don't have permission to use this command"
+      );
     channel = message.content
       .slice("!channel")
       .trim()
@@ -160,6 +244,10 @@ client.on("message", async (message) => {
     message.channel.send({ embeds: [channelembed] });
   }
   if (message.content.startsWith("!help")) {
+    if (!message.member.roles.cache.has(`${admin_role}`))
+      return message.channel.send(
+        "You don't have permission to use this command"
+      );
     const HelpEmbed = new MessageEmbed()
       .setTitle(`Command List`)
       .setColor(`RED`)
