@@ -273,6 +273,24 @@ client.on("message", async (message) => {
 
     message.channel.send({ embeds: [HelpEmbed] });
   }
+
+  if (message.content.startsWith("!list")) {
+    /*if (!message.member.roles.cache.has(`${admin_role}`))
+      return message.channel.send(
+        "You don't have permission to use this command"
+      ); */
+
+    DB.qotd.findAll({ attributes: ["Question"] }).then((questions) => {
+      const listembed = new MessageEmbed()
+        .setTitle(`Question List`)
+        .setColor(`RED`)
+        .setDescription(
+          `${questions.map((question) => question.Question).join("\n\n**-** ")}`
+        );
+
+      message.channel.send({ embeds: [listembed] });
+    });
+  }
 });
 
 // Login to Discord with your client's token
